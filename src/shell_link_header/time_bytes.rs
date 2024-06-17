@@ -22,11 +22,11 @@ use std::time::SystemTime;
 use crate::shared::{ldap_timestamp_to_unix, unix_to_ldap_timestamp};
 
 #[derive(Debug, PartialEq)]
-pub struct CreationTime {
+pub struct Filetime {
     ldap_timestamp: u64,
 }
 
-impl Default for CreationTime {
+impl Default for Filetime {
     fn default() -> Self {
         match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
             Ok(n) => {
@@ -46,7 +46,7 @@ impl Default for CreationTime {
     }
 }
 
-impl CreationTime {
+impl Filetime {
     pub fn new_from_ldap(ldap_timestamp: u64) -> Self {
         Self { ldap_timestamp }
     }
@@ -101,7 +101,7 @@ mod tests {
         let time_bytes: [u8; 8] = [0x00, 0x91, 0x85, 0xe8, 0xf4, 0x8f, 0xd9, 0x01];
 
         assert_eq!(
-            CreationTime::read(&time_bytes).get_ldap_time(),
+            Filetime::read(&time_bytes).get_ldap_time(),
             133295946020000000
         );
     }
@@ -111,7 +111,7 @@ mod tests {
         let time_bytes: [u8; 8] = [0x00, 0x91, 0x85, 0xe8, 0xf4, 0x8f, 0xd9, 0x01];
         let ldap_timestamp: u64 = 133295946020000000;
         assert_eq!(
-            CreationTime::new_from_ldap(ldap_timestamp).to_bytes(),
+            Filetime::new_from_ldap(ldap_timestamp).to_bytes(),
             time_bytes
         );
     }

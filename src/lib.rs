@@ -1,5 +1,3 @@
-pub use shell_link_header::{file_attribute_flags::FileAttributesFlags, link_flags::LinkFlags};
-
 pub mod file;
 pub mod shared;
 pub mod shell_link_header;
@@ -20,18 +18,6 @@ pub fn const_bytes() -> [u8; 20] {
         whole
     };
     whole
-}
-
-#[derive(Default, Debug, PartialEq)]
-pub struct Lnk {
-    link_flags: LinkFlags,
-    file_attrubute_flags: FileAttributesFlags,
-}
-
-impl Lnk {
-    // pub fn new() -> Self {
-    //     Self {}
-    // }
 }
 
 // #[cfg(test)]

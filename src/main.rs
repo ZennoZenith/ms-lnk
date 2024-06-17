@@ -1,10 +1,10 @@
 #![allow(unused)]
 use chrono::prelude::*;
-use std::fs;
+use std::fs::{self, FileTimes};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use ms_lnk::shared::{ldap_timestamp_to_unix, reverse_byte};
-use ms_lnk::shell_link_header::time_bytes::CreationTime;
+use ms_lnk::shell_link_header::time_bytes::Filetime;
 
 fn main() {
     // chat_gpt();
@@ -17,7 +17,7 @@ fn main() {
     // }
     // println!();
 
-    let timestamp = ldap_timestamp_to_unix(CreationTime::default().get_ldap_time());
+    let timestamp = ldap_timestamp_to_unix(Filetime::default().get_ldap_time());
 
     let datetime = DateTime::from_timestamp(timestamp.0, 0).unwrap();
 
@@ -29,7 +29,7 @@ fn main() {
     // Print the newly formatted date and time
     println!("new data: {}", newdate);
     println!("new data: {:?}", ldap_timestamp_to_unix(133295946020000000));
-    let temp = CreationTime::new_from_ldap(133295946020000000);
+    let temp = Filetime::new_from_ldap(133295946020000000);
     println!("{:?}", temp);
     print!("Time bytes:         ");
     // let time_bytes: [u8; 8] = [0xD0, 0xE9, 0xEE, 0xF2, 0x15, 0x15, 0xC9, 0x01];
