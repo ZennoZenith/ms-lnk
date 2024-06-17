@@ -1,19 +1,43 @@
 #![allow(unused)]
+use chrono::prelude::*;
+use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use chrono::prelude::*;
-use chrono::TimeDelta;
+use ms_lnk::shared::{ldap_timestamp_to_unix, reverse_byte};
+use ms_lnk::shell_link_header::time_bytes::CreationTime;
 
 fn main() {
-    let dt = Utc.with_ymd_and_hms(2008, 9, 12, 20, 27, 17).unwrap(); // `2008-09-12T20:27:17Z`
+    // chat_gpt();
+    // test_read();
 
-    dbg!(dt);
-    chat_gpt();
-    // 9/12/08, 8:27:17PM
-    // 3D 0E 12 AE A7 C8 9D
+    // print!("Time bytes:         ");
+    // let time_bytes: [u8; 8] = [0xD0, 0xE9, 0xEE, 0xF2, 0x15, 0x15, 0xC9, 0x01];
+    // for x in time_bytes.iter() {
+    //     print!("{:#2x} ", x);
+    // }
+    // println!();
 
-    // D0 E9 EE F2 15 15 C9 01
-    let time_bytes: [u8; 8] = [0xD0, 0xE9, 0xEE, 0xF2, 0x15, 0x15, 0xC9, 0x01];
+    let timestamp = ldap_timestamp_to_unix(CreationTime::default().get_ldap_time());
+
+    let datetime = DateTime::from_timestamp(timestamp.0, 0).unwrap();
+
+    // Create a normal DateTime from the NaiveDateTime
+
+    // Format the datetime how you want
+    let newdate = datetime.format("%Y-%m-%d %H:%M:%S");
+
+    // Print the newly formatted date and time
+    println!("new data: {}", newdate);
+    println!("new data: {:?}", ldap_timestamp_to_unix(133295946020000000));
+    let temp = CreationTime::new_from_ldap(133295946020000000);
+    println!("{:?}", temp);
+    print!("Time bytes:         ");
+    // let time_bytes: [u8; 8] = [0xD0, 0xE9, 0xEE, 0xF2, 0x15, 0x15, 0xC9, 0x01];
+    // for x in time_bytes.iter() {
+    for x in temp.to_bytes().iter() {
+        print!("{:#2x} ", x);
+    }
+    println!();
 }
 
 fn chat_gpt() {
@@ -30,4 +54,15 @@ fn chat_gpt() {
 
     println!("Intervals since January 1, 1601: {}", intervals_since_1601);
     println!("In hex {:#16x}", intervals_since_1601);
+}
+
+fn test_read() {
+    let data = fs::read("./temp/Everything.lnk").expect("Unable to read file");
+
+    print!("Time bytes:         ");
+    // let time_bytes: [u8; 8] = [0xD0, 0xE9, 0xEE, 0xF2, 0x15, 0x15, 0xC9, 0x01];
+    for x in &data[28..36] {
+        print!("{:#2x} ", x);
+    }
+    println!()
 }

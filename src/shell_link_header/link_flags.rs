@@ -32,37 +32,6 @@ pub struct LinkFlags {
 }
 
 impl LinkFlags {
-    fn default() -> Self {
-        Self {
-            has_link_target_idlist: false,
-            has_link_info: false,
-            has_name: false,
-            has_relative_path: false,
-            has_working_dir: false,
-            has_arguments: false,
-            has_icon_location: false,
-            is_unicode: false,
-            force_no_link_info: false,
-            has_exp_string: false,
-            run_in_separate_process: false,
-            unused1: false,
-            has_darwin_id: false,
-            run_as_user: false,
-            has_exp_icon: false,
-            no_pidl_alias: false,
-            unused2: false,
-            run_with_shim_layer: false,
-            force_no_link_track: false,
-            enable_target_metadata: false,
-            disable_link_path_tracking: false,
-            disable_known_folder_tracking: false,
-            disable_known_folder_alias: false,
-            allow_link_to_link: false,
-            unalias_on_save: false,
-            prefer_environment_path: false,
-            keep_local_idlist_for_unctarget: false,
-        }
-    }
     pub fn read(data: &[u8; 4]) -> Self {
         let mut link_flag = Self::default();
 

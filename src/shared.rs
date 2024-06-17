@@ -1,3 +1,22 @@
+const TIME_FROM_LDAP_START_TO_UNIX_START_IN_SEC: u64 = 11_644_473_600;
+const FACTOR_TO_CONVERT_LDAP_TO_UNIX_SECONDS: u64 = 10_000_000;
+
+/// returns (seconds, nano seconds)
+pub fn ldap_timestamp_to_unix(ldap: u64) -> (i64, u64) {
+    (
+        ((ldap / FACTOR_TO_CONVERT_LDAP_TO_UNIX_SECONDS)
+            - TIME_FROM_LDAP_START_TO_UNIX_START_IN_SEC) as i64,
+        (ldap % FACTOR_TO_CONVERT_LDAP_TO_UNIX_SECONDS) * 100,
+    )
+}
+
+pub fn unix_to_ldap_timestamp(unix_seconds: i64, unix_nanoseconds: u64) -> u64 {
+    // multiply by 10 000 000 to get 100 nano seconds
+    ((unix_seconds as u64 + TIME_FROM_LDAP_START_TO_UNIX_START_IN_SEC)
+        * FACTOR_TO_CONVERT_LDAP_TO_UNIX_SECONDS)
+        + (unix_nanoseconds / 100)
+}
+
 pub fn str_to_hex(input: &str) -> Vec<u8> {
     let mut hex_vec: Vec<u8> = Vec::new();
     let input = input.replace('_', "");

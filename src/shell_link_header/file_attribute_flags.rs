@@ -19,25 +19,6 @@ pub struct FileAttributesFlags {
     pub file_attribute_encrypted: bool,
 }
 impl FileAttributesFlags {
-    fn default() -> Self {
-        FileAttributesFlags {
-            file_attribute_readonly: false,
-            file_attribute_hidden: false,
-            file_attribute_system: false,
-            reserved1: false,
-            file_attribute_directory: false,
-            file_attribute_archive: false,
-            reserved2: false,
-            file_attribute_normal: false,
-            file_attribute_temporary: false,
-            file_attribute_sparse_file: false,
-            file_attribute_reparse_point: false,
-            file_attribute_compressed: false,
-            file_attribute_offline: false,
-            file_attribute_not_content_indexed: false,
-            file_attribute_encrypted: false,
-        }
-    }
     pub fn read(data: &[u8; 4]) -> Self {
         let mut file_attribute_flag = Self::default();
 
