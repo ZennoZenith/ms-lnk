@@ -51,11 +51,8 @@ impl Filetime {
 
     // OPTIMIZE
     pub fn read(data: &[u8; 8]) -> Self {
-        let mut reversed_bytes = data.to_owned();
-        reversed_bytes.reverse();
         let mut ldap_timestamp: u64 = 0;
-
-        for x in reversed_bytes.iter() {
+        for x in data.iter().rev() {
             ldap_timestamp <<= 8;
             ldap_timestamp += *x as u64;
         }
@@ -64,6 +61,7 @@ impl Filetime {
     }
 
     pub fn to_bytes(&self) -> [u8; 8] {
+        // OPTIMIZE: use of array instead of vec
         let mut time_bytes = vec![];
         let mut ldap_timestamp = self.0;
         for _ in 0..8 {
