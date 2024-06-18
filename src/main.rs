@@ -1,5 +1,6 @@
 #![allow(unused)]
 use chrono::prelude::*;
+use ms_lnk::shell_link_header::icon_index::IconIndex;
 use std::fs::{self, FileTimes};
 use std::time::{SystemTime, UNIX_EPOCH};
 
