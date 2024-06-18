@@ -19,7 +19,7 @@ pub struct FileAttributesFlags {
     pub file_attribute_encrypted: bool,
 }
 impl FileAttributesFlags {
-    pub fn read(data: &[u8; 4]) -> Self {
+    pub fn from_bytes(data: &[u8; 4]) -> Self {
         let mut file_attribute_flag = Self::default();
 
         let reversed_byte = shared::reverse_byte(data[0]);
@@ -119,7 +119,7 @@ mod tests {
 
         assert_eq!(
             expected_file_attributes_flag,
-            FileAttributesFlags::read(&file_attributes_flag_bytes)
+            FileAttributesFlags::from_bytes(&file_attributes_flag_bytes)
         );
     }
     #[test]

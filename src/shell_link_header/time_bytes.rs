@@ -50,7 +50,7 @@ impl Filetime {
     }
 
     // OPTIMIZE
-    pub fn read(data: &[u8; 8]) -> Self {
+    pub fn from_bytes(data: &[u8; 8]) -> Self {
         let mut ldap_timestamp: u64 = 0;
         for x in data.iter().rev() {
             ldap_timestamp <<= 8;
@@ -91,7 +91,7 @@ mod tests {
         let time_bytes: [u8; 8] = [0x00, 0x91, 0x85, 0xe8, 0xf4, 0x8f, 0xd9, 0x01];
 
         assert_eq!(
-            Filetime::read(&time_bytes).get_ldap_time(),
+            Filetime::from_bytes(&time_bytes).get_ldap_time(),
             133295946020000000
         );
     }

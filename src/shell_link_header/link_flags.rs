@@ -32,7 +32,7 @@ pub struct LinkFlags {
 }
 
 impl LinkFlags {
-    pub fn read(data: &[u8; 4]) -> Self {
+    pub fn from_bytes(data: &[u8; 4]) -> Self {
         let mut link_flag = Self::default();
 
         let reversed_byte = shared::reverse_byte(data[0]);
@@ -232,7 +232,7 @@ mod tests {
             ..Default::default()
         };
 
-        assert_eq!(expected_link_flag, LinkFlags::read(&link_flag_bytes));
+        assert_eq!(expected_link_flag, LinkFlags::from_bytes(&link_flag_bytes));
     }
     #[test]
     fn link_flag_to_bytes() {
