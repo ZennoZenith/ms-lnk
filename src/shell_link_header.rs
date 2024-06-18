@@ -25,7 +25,6 @@ pub struct ShellLinkHeader {
     file_size: FileSize,
     icon_index: IconIndex,
     show_command: ShowCommand,
-    // TODO: Hotkey struct is not fully implemented yet
     hot_key: Hotkey,
     // reserver1 - 2 bytes - must be zero
     // reserver2 - 4 bytes - must be zero

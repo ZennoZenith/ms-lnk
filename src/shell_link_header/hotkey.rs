@@ -1,4 +1,4 @@
-// TODO: This module is untested
+// TODO: Define custom ERROR
 const NOT_ASSIGNED: u8 = 0x00;
 const KEY_0: u8 = 0x30;
 const KEY_1: u8 = 0x31;
@@ -200,8 +200,7 @@ impl HotkeyLowByte {
         }
     }
 
-    // TODO: Define custom ERROR
-    pub fn from_byte(data: u8) -> Result<Self, String> {
+    pub fn from_byte(data: u8) -> Result<Self, &'static str> {
         match data {
             NOT_ASSIGNED => Ok(Self::NotAssigned),
             KEY_0 => Ok(Self::Key0),
@@ -266,7 +265,7 @@ impl HotkeyLowByte {
             KEY_F24 => Ok(Self::KeyF24),
             KEY_NUM_LOCK => Ok(Self::KeyNumLock),
             KEY_SCROLL_LOCK => Ok(Self::KeyScrollLock),
-            _ => Err("Invalid Hotkey Low Byte".to_string()),
+            _ => Err("Invalid Hotkey Low Byte"),
         }
     }
 }
@@ -285,7 +284,7 @@ pub enum HotkeyHighByte {
 }
 
 impl HotkeyHighByte {
-    pub fn from_byte(data: u8) -> Result<Self, String> {
+    pub fn from_byte(data: u8) -> Result<Self, &'static str> {
         match data {
             0x00 => Ok(HotkeyHighByte::NoModifier),
             0x01 => Ok(HotkeyHighByte::KeyShift),
@@ -295,7 +294,7 @@ impl HotkeyHighByte {
             0x05 => Ok(HotkeyHighByte::KeyAltShift),
             0x06 => Ok(HotkeyHighByte::KeyControlAlt),
             0x07 => Ok(HotkeyHighByte::KeyControlAltShift),
-            _ => Err("Invalid Hotkey High Byte".to_string()),
+            _ => Err("Invalid Hotkey High Byte"),
         }
     }
     pub fn to_byte(&self) -> u8 {
@@ -314,26 +313,92 @@ impl HotkeyHighByte {
 
 // 2 bytes
 #[derive(Default, Debug, PartialEq)]
-pub struct Hotkey {
-    low_byte: HotkeyLowByte,
-    high_byte: HotkeyHighByte,
-}
+pub struct Hotkey(HotkeyLowByte, HotkeyHighByte);
 
 impl Hotkey {
-    // TODO:
-    pub fn from_bytes(_data: &[u8; 2]) -> Self {
-        Hotkey::default()
+    pub fn new(
+        hotkey_low_byte: HotkeyLowByte,
+        hotkey_high_byte: HotkeyHighByte,
+    ) -> Result<Self, &'static str> {
+        if (hotkey_low_byte == HotkeyLowByte::NotAssigned
+            && hotkey_high_byte != HotkeyHighByte::NoModifier)
+            || (hotkey_low_byte != HotkeyLowByte::NotAssigned
+                && hotkey_high_byte == HotkeyHighByte::NoModifier)
+        {
+            return Err("Invalid hotkey bytes combination");
+        }
+
+        Ok(Self(hotkey_low_byte, hotkey_high_byte))
     }
-    // TODO:
+    pub fn from_bytes(data: &[u8; 2]) -> Result<Self, &'static str> {
+        if (data[0] == 0 && data[1] != 0) || (data[0] != 0 && data[1] == 0) {
+            return Err("Invalid hotkey bytes combination");
+        }
+        Ok(Self(
+            HotkeyLowByte::from_byte(data[0])?,
+            HotkeyHighByte::from_byte(data[1])?,
+        ))
+    }
     pub fn to_bytes(&self) -> [u8; 2] {
-        [0, 0]
+        [self.0.to_byte(), self.1.to_byte()]
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test() {}
-// }
+    #[test]
+    fn hot_key_from_bytes() {
+        assert_eq!(
+            Hotkey::from_bytes(&[0x45, 0x03]).unwrap(),
+            Hotkey::new(HotkeyLowByte::KeyE, HotkeyHighByte::KeyControlShift).unwrap()
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_from_bytes_panic_1() {
+        Hotkey::from_bytes(&[0x45, 0x13]).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_from_bytes_panic_2() {
+        Hotkey::from_bytes(&[0xA5, 0x03]).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_from_bytes_panic_3() {
+        Hotkey::from_bytes(&[0x45, 0x00]).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_from_bytes_panic_4() {
+        Hotkey::from_bytes(&[0x00, 0x03]).unwrap();
+    }
+
+    #[test]
+    fn hot_key_to_bytes() {
+        assert_eq!(
+            Hotkey::new(HotkeyLowByte::KeyE, HotkeyHighByte::KeyControlShift)
+                .unwrap()
+                .to_bytes(),
+            [0x45, 0x03]
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_to_bytes_panic_1() {
+        Hotkey::new(HotkeyLowByte::NotAssigned, HotkeyHighByte::KeyControlShift).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn hot_key_to_bytes_panic_2() {
+        Hotkey::new(HotkeyLowByte::KeyE, HotkeyHighByte::NoModifier).unwrap();
+    }
+}

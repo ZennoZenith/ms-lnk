@@ -1,7 +1,8 @@
 #![allow(unused)]
 use chrono::prelude::*;
-use ms_lnk::shell_link_header::icon_index::IconIndex;
-use std::fs::{self, FileTimes};
+use ms_lnk::shell_link_header::hotkey::HotkeyLowByte;
+use ms_lnk::shell_link_header::{hotkey::Hotkey, icon_index::IconIndex, show_command::ShowCommand};
+use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use ms_lnk::shared::{ldap_timestamp_to_unix, reverse_byte};
@@ -17,7 +18,9 @@ fn main() {
 
     // chat_gpt();
     // test_read();
-    file_size_test();
+    // file_size_test();
+    // dbg!(IconIndex::from_bytes(&[0x08, 0x00, 0x00, 0x00,]));
+    // dbg!(ShowCommand::from_bytes(&[0x03, 0x00, 0x00, 0x00,]));
 }
 
 fn file_size_test() {
