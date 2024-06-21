@@ -1,4 +1,5 @@
 pub mod file;
+pub mod link_flag_header;
 pub mod shared;
 pub mod shell_link_header;
 

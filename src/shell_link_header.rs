@@ -14,6 +14,7 @@ use link_flags::LinkFlags;
 use show_command::ShowCommand;
 use time_bytes::Filetime;
 
+// min size = 76 bytes;
 #[derive(Default, Debug, PartialEq)]
 pub struct ShellLinkHeader {
     // 20 const byte prefix

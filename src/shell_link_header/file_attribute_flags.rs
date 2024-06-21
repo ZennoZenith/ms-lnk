@@ -2,21 +2,21 @@ use crate::shared;
 
 #[derive(Default, Debug, PartialEq)]
 pub struct FileAttributesFlags {
-    pub file_attribute_readonly: bool,
-    pub file_attribute_hidden: bool,
-    pub file_attribute_system: bool,
-    pub reserved1: bool,
-    pub file_attribute_directory: bool,
-    pub file_attribute_archive: bool,
-    pub reserved2: bool,
-    pub file_attribute_normal: bool,
-    pub file_attribute_temporary: bool,
-    pub file_attribute_sparse_file: bool,
-    pub file_attribute_reparse_point: bool,
-    pub file_attribute_compressed: bool,
-    pub file_attribute_offline: bool,
-    pub file_attribute_not_content_indexed: bool,
-    pub file_attribute_encrypted: bool,
+    file_attribute_readonly: bool,
+    file_attribute_hidden: bool,
+    file_attribute_system: bool,
+    reserved1: bool,
+    file_attribute_directory: bool,
+    file_attribute_archive: bool,
+    reserved2: bool,
+    file_attribute_normal: bool,
+    file_attribute_temporary: bool,
+    file_attribute_sparse_file: bool,
+    file_attribute_reparse_point: bool,
+    file_attribute_compressed: bool,
+    file_attribute_offline: bool,
+    file_attribute_not_content_indexed: bool,
+    file_attribute_encrypted: bool,
 }
 impl FileAttributesFlags {
     pub fn from_bytes(data: &[u8; 4]) -> Self {
