@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::shared;
 
 #[derive(Default, Debug, PartialEq)]
@@ -31,6 +33,95 @@ pub struct LinkFlags {
     keep_local_idlist_for_unctarget: bool,
 }
 
+impl fmt::Display for LinkFlags {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut flags = String::new();
+
+        if self.has_link_target_idlist {
+            flags.push_str("HasLinkTargetIdlist ");
+        }
+        if self.has_link_info {
+            flags.push_str("HasLinkInfo ");
+        }
+        if self.has_name {
+            flags.push_str("HasName ");
+        }
+        if self.has_relative_path {
+            flags.push_str("HasRelativePath ");
+        }
+        if self.has_working_dir {
+            flags.push_str("HasWorkingDir ");
+        }
+        if self.has_arguments {
+            flags.push_str("HasArguments ");
+        }
+        if self.has_icon_location {
+            flags.push_str("HasIconLocation ");
+        }
+        if self.is_unicode {
+            flags.push_str("IsUnicode ");
+        }
+        if self.force_no_link_info {
+            flags.push_str("ForceNoLinkInfo ");
+        }
+        if self.has_exp_string {
+            flags.push_str("HasExpString ");
+        }
+        if self.run_in_separate_process {
+            flags.push_str("RunInSeparateProcess ");
+        }
+        if self.unused1 {
+            flags.push_str("unused1 ");
+        }
+        if self.has_darwin_id {
+            flags.push_str("HasDarwinId ");
+        }
+        if self.run_as_user {
+            flags.push_str("RunAsUser ");
+        }
+        if self.has_exp_icon {
+            flags.push_str("HasExpIcon ");
+        }
+        if self.no_pidl_alias {
+            flags.push_str("NoPidlAlias ");
+        }
+        if self.unused2 {
+            flags.push_str("unused2 ");
+        }
+        if self.run_with_shim_layer {
+            flags.push_str("RunWithShimLayer ");
+        }
+        if self.force_no_link_track {
+            flags.push_str("ForceNoLinkTrack ");
+        }
+        if self.enable_target_metadata {
+            flags.push_str("EnableTargetMetadata ");
+        }
+        if self.disable_link_path_tracking {
+            flags.push_str("DisableLinkPathTracking ");
+        }
+        if self.disable_known_folder_tracking {
+            flags.push_str("DisableKnownFolderTracking ");
+        }
+        if self.disable_known_folder_alias {
+            flags.push_str("DisableKnownFolderAlias ");
+        }
+        if self.allow_link_to_link {
+            flags.push_str("AllowLinkToLink ");
+        }
+        if self.unalias_on_save {
+            flags.push_str("UnaliasOnSave ");
+        }
+        if self.prefer_environment_path {
+            flags.push_str("PreferEnvironmentPath ");
+        }
+        if self.keep_local_idlist_for_unctarget {
+            flags.push_str("KeepLocalIdlistForUnctarget ");
+        }
+
+        write!(f, "Flag(s) set: {}", flags)
+    }
+}
 impl LinkFlags {
     pub fn from_bytes(data: &[u8; 4]) -> Self {
         let mut link_flag = Self::default();
